@@ -8,7 +8,7 @@ db
 # jhalley's stuff
 samples/
 build/
-logs
+logs/*
 apps/data_dump/
 apps/scripts/tmp/
 
