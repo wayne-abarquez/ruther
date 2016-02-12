@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta name="viewport" content="initial-scale=1.0, user-scalable=no" />
+    <style type="text/css">
+      html { height: 100% }
+      body { height: 100%; margin: 0; padding: 0 }
+      #map-canvas { height: 100% }
+    </style>
+	
+	<script type="text/javascript" src="/tutorial/controls.js"></script>
+    <script type="text/javascript">
+    function initialize() {
+      var mapOptions = {
+        zoom: 6,
+        center: new google.maps.LatLng(0, 110),
+        mapTypeId: google.maps.MapTypeId.ROADMAP
+      }
+      var map = new google.maps.Map(document.getElementById("map-canvas"), mapOptions);
+		
+	  console.log("Initializing place marker control");
+	  var placeMarkerCtl = new PlaceMarkerControl(map, document.getElementById('map-control'));
+	  console.log("Place marker control initialized");
+	  
+	  console.log("Initializing Draw Polylines control");
+	  var placeMarkerCtl = new DrawPolylinesControl(map, document.getElementById('map-control'));
+	  console.log("Place marker control initialized");
+    };
+
+    
+    function loadScript() {
+
+	  console.log("Loading script...");
+      var script = document.createElement("script");
+      script.type = "text/javascript";
+      script.src = "http://maps.googleapis.com/maps/api/js?sensor=false&callback=initialize";
+      document.body.appendChild(script);
+    };
+
+
+    window.onload = loadScript;
+    </script>
+  </head>
+  <body>
+    <div><span>This is my test</span></div>
+    <div id="map-control">
+        <!-- <div id="map-control-poly" style="background-color: white; border-style: solid; border-width: : 2px; cursor: pointer; text-align: center;" title="Click to draw polyline">
+           poly
+        </div> -->
+    </div>
+    <div id="map-canvas"/>
+  </body>
+</html>

@@ -1,0 +1,124 @@
+<!DOCTYPE html>
+<html ng-app="ruther">
+  <head>
+    <meta name="viewport" content="initial-scale=1.0, user-scalable=no" />
+	<script type="text/javascript" src="https://www.google.com/jsapi"></script>
+    <script type="text/javascript" src="/resources/lib/jquery-1.10.2.min.js"></script>
+    <script type="text/javascript" src="/resources/lib/bootstrap/js/bootstrap.min.js"></script>
+	<script type="text/javascript" src="/resources/lib/angular.min.js"></script> 
+
+    <link rel="stylesheet" href="/resources/lib/bootstrap/css/bootstrap.min.css" media="screen"></link>
+    <link rel="stylesheet" href="/resources/lib/bootstrap/css/bootstrap-responsive.min.css"></link>
+    <link rel="stylesheet" href="/resources/lib/font-awesome/css/font-awesome.min.css"></link>
+
+    <style type="text/css">
+      #topdisplaybanner{
+        margin-top: 11px;
+        width: 120px;
+        text-align: center;
+        margin-left: 30%;
+      }
+      .customer-logo
+      {
+        height: 40px;
+        margin: 0px 5px 0px 5px;
+
+      }
+      .customer-brand
+      {
+         padding:0px 0px 0px 0px !important;
+
+      }
+      .app-name
+      {
+         margin:4px 15px 0px 0px; 
+         color:#b4191f;
+         font-size:14px;
+         text-shadow: 0 0px 0 rgba(0,0,0,0.25)
+      }
+      .app-name:hover
+      {
+         color:#b4191f;
+         text-shadow: 0 0px 0 rgba(0,0,0,0.25)
+      }
+      
+      .custom-navbar
+      {
+        background-image: linear-gradient(to bottom,#FFF,#FFF) !important;
+        border-color: #FFF !important;
+      }
+      .navbar-inverse .nav li
+      {
+        background-color:#b4191f;
+        margin: 5px 2px 0px 2px;
+      }
+
+      .navbar-inverse .nav li a
+      {
+        color:#fff;
+        padding: 5px 15px 5px 15px;
+      }
+      .navbar-text
+      {
+        color:#b4191f !important;
+        margin-right: 15px;
+        margin-top: 0px;
+      }
+        .navagis-logo
+      {
+        height:20px;
+        display:block;
+      }
+      .poweredby
+      {
+        display:block;
+        text-align:center;
+        color:#b4191f;
+        font-size:8px;
+        margin-left: 10px;
+    }
+    </style>
+  </head>
+
+  <body>
+    <!-- Start Header -->
+    <div class="navbar navbar-inverse" style="margin-bottom: 0px;">
+      <div class="custom-navbar navbar-inner" style="border-radius: 0px !important">
+        <div class="container-fluid">
+          <a class="btn btn-navbar" data-toggle="collapse" data-target=".navbar-responsive-collapse">
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+          </a>
+          <!--<a class="customer-brand brand" href="#"><img class="customer-logo" src="/resources/smartfren/Smartfren-Logo.jpg"></img><span class="app-name">Sales Tracking Platform<span>  </a>-->
+	  <p class='navbar-text'>
+            <a class="customer-brand brand" href="#"><span class="app-name">Sales Tracking Platform<span>  </a>
+	  </p>
+          <div class="nav-collapse collapse navbar-responsive-collapse">
+            <ul class="nav">
+              <li><a href="/index">Home</a></li>
+              {% if user.page_view_permission.view_admin %}<li><a href="/admin">Administration</a></li>{% endif %}
+            </ul>
+            <span id="topdisplaybanner" class="label label-warning" style="display: none;">Warning</span>
+            <div class="poweredby pull-right">
+                <span style="display:block">powered by</span> 
+                <img class="navagis-logo" src="/resources/NavagisLogo.png"></img>
+            </div>
+            {% if user %}
+            <ul class="nav pull-right">
+              {% if user %}<li><a href="/logout">Logout</a>{% endif %}
+            </ul>
+            <p class="navbar-text pull-right">
+               Logged in as {{ user.username }}
+            </p>
+
+            {% endif %}
+          </div><!-- /.nav-collapse -->
+        </div>
+      </div><!-- /navbar-inner -->
+    </div>
+    <!-- End Header -->
+    {% block content %}{% endblock %}
+  </body>
+
+</html>

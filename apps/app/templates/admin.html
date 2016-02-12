@@ -1,0 +1,50 @@
+{% extends "base.html" %}
+
+{% block content %}
+
+<script type="text/javascript" src="/resources/lib/jquery-ui-1.10.3.custom/js/jquery-ui-1.10.3.custom.min.js"></script>
+<script type="text/javascript" src="/resources/lib/jquery-ui-1.10.3.effects_highlight.min.js"></script>
+<script type="text/javascript" src="/resources/lib/bootstrap-colorpicker/js/bootstrap-colorpicker.js"></script>
+<script type="text/javascript" src="/resources/lib/bootstrap/js/bootstrap-transition.js"></script>
+<script type="text/javascript" src="/resources/lib/bootstrap/js/bootstrap-collapse.js"></script>
+<script type="text/javascript" src="/resources/lib/bootstrap/js/bootstrap-tooltip.js"></script>
+<script type="text/javascript" src="/resources/lib/chosen/public/chosen.jquery.js"></script>
+<script type="text/javascript" src="/resources/lib/jquery.dataTables.min.js"></script>
+<script type="text/javascript" src="/js/bootstrap-datepicker-navagis.js"></script>
+<script type="text/javascript" src="/js/globals.js"></script>
+<script type="text/javascript" src="/js/services/web_service.js"></script>
+<script type="text/javascript" src="/js/controllers/admin_role.js"></script>
+<script type="text/javascript" src="/js/controllers/admin_user.js"></script>
+<script type="text/javascript" src="/js/controllers/admin_sync.js"></script>
+<script type="text/javascript" src="/js/controllers/admin_kpi_color_scheme.js"></script>
+<script type="text/javascript" src="/js/controllers/admin.js"></script>
+
+<link rel="stylesheet" href="/resources/lib/bootstrap-colorpicker/css/bootstrap-colorpicker.css"></link>
+
+<div class="container-fluid" style="margin: 10px 10px 10px 10px">
+    <div class="tabbable">
+        <ul class="nav nav-tabs">
+            <li><a href="#admin_user_tab" data-toggle="tab" ng-click="viewUser()">User</a></li>
+            <li class="active"><a href="#admin_role_tab" data-toggle="tab" ng-click="viewRole()">Role</a></li>
+            <li><a href="#admin_sync_tab" data-toggle="tab" ng-click="viewSync()">Sync</a></li>
+            <li><a href="#admin_kpi_color_scheme_tab" data-toggle="tab" ng-click="kpiColorScheme()">KPI Color Scheme</a></li>
+        </ul>
+        <div class="tab-content">
+
+             <div class="tab-pane active" id="admin_role_tab">
+                {% include "admin_role.html" %}
+             </div>
+              <div class="tab-pane " id="admin_user_tab">
+                {% include "admin_user.html" %}
+             </div>
+             <div class="tab-pane " id="admin_sync_tab">
+                {% include "admin_sync.html" %}
+             </div>
+             <div class="tab-pane " id="admin_kpi_color_scheme_tab">
+                {% include "admin_kpi_color_scheme.html" %}
+             </div>
+        </div>
+
+    </div>
+</div>
+{% endblock %}

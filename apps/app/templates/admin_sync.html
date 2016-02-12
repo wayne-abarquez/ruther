@@ -1,0 +1,99 @@
+{% raw %}
+
+<div class='container'>
+    <br>
+    <div ng-controller="rutherAdminSyncController">
+        <div class="btn-toolbar pagination-centered">
+            <div class='btn-group'>
+                <button class='btn' ng-click="LDAP()">Scan for changes</button>
+            </div>
+        </div>
+        <div class='alert alert-success' ng-show='success == true'>
+            {{ success_message }} 
+        </div>
+        <div class='alert alert-error' ng-show='fails == true'>
+            {{ fails_message }}
+        </div>
+        <div class='alert alert-block' ng-show='wait == true'>
+            Please wait.
+        </div>
+        <div class='alert' ng-show='need_sync == true'>
+            <strong>Warning!</strong> Please confirm the following changes. All changes cannot be reverted back after confirmed.
+        </div>
+        <div class='row-fluid'>
+            <table class='table span4' ng-show="new_roles">
+                <thead>
+                    <th>Role to be added</th>
+                </thead>
+                <tbody>
+                    <tr ng-repeat='u in new_roles'>
+                        <td>{{ u }}</td>
+                    </tr>
+                </tbody>
+            </table>
+            
+            <table class='table span4' ng-show="defunct_roles">
+                <thead>
+                    <th>Role to be deleted</th>
+
+                </thead>
+                <tbody>
+                    <tr ng-repeat='u in defunct_roles'>
+                        <td>{{ u }}</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+        <div class='row-fluid'>
+            <table class='table span6' ng-show="new_users">
+                <thead>
+                    <th>User to be added</th>
+                    <th>Roles</th>
+                </thead>
+                <tbody>
+                    <tr ng-repeat='u in new_users'>
+                        <td>{{ u.username }}</td>
+                        <td>{{ u.roles_txt }}</td>
+                    </tr>
+                </tbody>
+            </table>
+            
+            <table class='table span4' ng-show="defunct_users">
+                <thead>
+                    <th>User to be deleted</th>
+
+                </thead>
+                <tbody>
+                    <tr ng-repeat='u in defunct_users'>
+                        <td>{{ u }}</td>
+                    </tr>
+                </tbody>
+            </table>
+
+        </div>
+        
+        <div class='row-fluid'>
+            <table class='table pagination-centered' ng-show="changed">
+                <thead>
+                    <th>Existing user with role change</th>
+                    <th>To</th>
+                    <th>From</th>
+                </thead>
+                <tbody>
+                    <tr ng-repeat='u in changed'>
+                        <td>{{ u.username }}</td>
+                        <td>{{ u.new_roles_txt }}</td>
+                        <td>{{ u.old_roles_txt }}</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+        <div class="btn-toolbar pagination-centered" ng-show='need_sync == true'>
+            <div class='btn-group'>
+                <button class='btn' ng-click="LDAPConfirm()">Confirm Changes</button>
+            </div>
+        </div>
+        
+    </div>
+</div>
+{% endraw %}

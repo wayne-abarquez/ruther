@@ -1,0 +1,19 @@
+venv
+db
+*.pyc
+*.swp
+*.swn
+*.swo
+
+# jhalley's stuff
+samples/
+build/
+logs
+apps/data_dump/
+apps/scripts/tmp/
+
+# media files
+apps/app/static/resources/media/facility_owner_picture/facility/*
+
+# OS Files
+._*

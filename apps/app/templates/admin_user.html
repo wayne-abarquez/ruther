@@ -1,0 +1,57 @@
+{% raw %}
+
+<div class='container'>
+    <div ng-controller="rutherAdminUserController">
+        <div class="btn-toolbar pagination-centered">
+            <div class='btn-group'  >
+                <button class='btn'ng-click="refreshList()">Refresh</button>
+            </div>
+        </div>
+        <br>
+        <table class='table'>
+        <thead>
+            <th>Username</th>
+            <th>Roles</th>
+
+        </thead>
+        
+        <tbody>
+            <tr ng-repeat='u in users'>
+                <td>{{ u.username }}</td>
+                <td>{{ u.roles_txt }}</td>
+
+            </tr>
+        </tbody>
+        </table>
+    </div>
+
+
+    <!-- <div ng-controller="rutherAdminUserDetails" ng-show="active_view == 'ViewDetails'">
+        <div class="row">
+            <form action="" method="post" name="login" class="form-horizontal">
+                <div class="control-group"><label class="control-label">Username</label><div class="controls"><input type="text" placeholder="username"/></div></div>
+                <div class="control-group"><label class="control-label">Password</label><div class="controls"><input type="password" placeholder="password"/></div></div>
+                <div class="control-group"><label class="control-label">Role</label><div class="controls"><input type="text" placeholder="Boundaries"/></div></div>
+            </form>
+            <div class='form-actions  pagination-centered'>       
+                <button class='btn btn-primary'>Save</button>
+                <button class 'btn'>Reset</button>
+            </div>
+        </div>
+    </div>
+
+    <div ng-controller="rutherAdminUserDetails" ng-show="active_view == 'ViewDetails'">
+        <div class="row">
+            <form action="" method="post" name="login" class="form-horizontal">
+                <div class="control-group"><label class="control-label">Username</label><div class="controls"><input type="text" placeholder="username"/></div></div>
+                <div class="control-group"><label class="control-label">Password</label><div class="controls"><input type="password" placeholder="password"/></div></div>
+                <div class="control-group"><label class="control-label">Role</label><div class="controls"><input type="text" placeholder="Boundaries"/></div></div>
+            </form>
+            <div class='form-actions  pagination-centered'>       
+                <button class='btn btn-primary'>Save</button>
+                <button class 'btn'>Reset</button>
+            </div>
+        </div>
+    </div> -->
+</div>
+{% endraw %}

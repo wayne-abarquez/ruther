@@ -1,0 +1,1040 @@
+{% extends "base.html" %}
+
+{% block content %}
+
+{% raw %}
+<script type="text/javascript" src="/resources/lib/jquery-ui-1.10.3.custom/js/jquery-ui-1.10.3.custom.min.js"></script>
+<script type="text/javascript" src="/resources/lib/jquery-ui-1.10.3.effects_highlight.min.js"></script>
+<script type="text/javascript" src="/resources/lib/bootstrap/js/bootstrap-transition.js"></script>
+<script type="text/javascript" src="/resources/lib/bootstrap/js/bootstrap-collapse.js"></script>
+<script type="text/javascript" src="/resources/lib/bootstrap/js/bootstrap-carousel.js"></script>
+<script type="text/javascript" src="/resources/lib/bootstrap/js/bootstrap-tab.js"></script>
+<script type="text/javascript" src="/resources/lib/bootstrap/js/bootstrap-modal.js"></script>
+<script type="text/javascript" src="/resources/lib/bootstrap/js/bootstrap-modalmanager.js"></script>
+<!--<script type="text/javascript" src="/resources/lib/chosen/public/chosen.jquery.js"></script>-->
+<script type="text/javascript" src="/resources/lib/jquery.dataTables.min.js"></script>
+<script type="text/javascript" src="/js/bootstrap-datepicker-navagis.js"></script>
+<script type="text/javascript" src="/js/detail-modal-charts.js"></script>
+<script type="text/javascript" src="/js/constants.js"></script>
+<script type="text/javascript" src="/js/globals.js"></script>
+<script type="text/javascript" src="/js/base.js"></script>
+<script type="text/javascript" src="/js/services/web_service.js"></script>
+<script type="text/javascript" src="/js/services/filter.js"></script>
+<script type="text/javascript" src="/js/services/google_earth.js"></script>
+<script type="text/javascript" src="/js/controllers.js"></script>
+<script type="text/javascript" src="/js/controllers/map_switch.js"></script>
+<script type="text/javascript" src="/resources/lib/DataTables/DT_bootstrap.js"></script>
+<script src="//maps.googleapis.com/maps/api/js?libraries=geometry&sensor=false"></script>
+<!--<script type="text/javascript" src="/resources/lib/ngTable/ng-table-master/ng-table.js"></script>-->
+
+<link rel="stylesheet" href="/resources/lib/bootstrap/css/bootstrap-modal.css" media="screen"></link>
+<link rel="stylesheet" href="/css/bootstrap-datepicker-navagis.css"></link>
+<link rel="stylesheet" href="/resources/lib/DataTables/DT_bootstrap.css"></link>
+<!--<link rel="stylesheet" href="/resources/lib/ngTable/ng-table-master/ng-table.css"></link>-->
+<style type="text/css">
+  html { height: 100% }
+  body { height: 100%; margin: 0; padding: 0 }
+  #map3d { height: 100% }
+  
+  .left_panel_control{
+    font-size: 15px;
+  }
+
+  /* list boundaries ---------------------------------------------*/
+  .collapsible_hierarchy ul, .collapsible_hierarchy li{
+    margin-left: 2px;
+    margin-right: 2px;
+    list-style: none;
+    font-size: 11px;
+  }
+
+  .collapsible_hierarchy ul li:last-child{
+    margin-bottom: 2px;
+  }
+
+  .collapsible_hierarchy ul li label{
+    border-bottom: dotted 1px grey;
+  }
+
+  .collapsible_hierarchy li .badge{
+    line-height: 10px;
+    margin-top: 3px;
+    margin-right: 2px;
+  }
+
+  .collapsible_hierarchy .icon-caret-down, .collapsible_hierarchy .icon-caret-up{
+    margin-left: 5px;
+    margin-right: 0px;
+  }
+
+  .bg-blue{
+    background-color: lightsteelblue; 
+  }
+
+  .bg-white{
+    background-color: white;
+  }
+  /* end list boundaries -----------------------------------------*/
+
+  /* iframe shim styling -----------------------------------------*/
+  .iframe-container {
+    z-index: 100;
+    position: absolute;
+    top: 60px;
+    left: 20px;
+  }
+  
+  .iframe-container .span2{
+    width: 100%;
+  }
+  
+  .iframe-container .well{
+    margin-bottom: 0px;
+    border-radius: 0px;
+    padding: 5px 0;
+  }
+
+  .iframe-container .nav-list{
+    padding-left: 5px;
+    padding-right: 5px;
+  }
+  
+  .content-container {
+    margin:0px;
+    padding:0px;
+    overflow-x: hidden;
+    overflow-y: hidden;
+  } 
+  
+  .iframeshim {
+    position: absolute;
+    left: 0px;
+    top: 0px;
+    width: 100%;
+    height: 100%;
+    z-index: -10000;
+    background: black;
+  }
+
+  /* Balloon specific styling -----------------------------------------*/
+  .balloon_iframe_wrapper .well:hover{
+    border: 2px solid #e3e3e3;
+  }
+
+  .balloon_iframe_wrapper .well:hover{
+    border: 2px solid dodgerblue;
+  }
+
+  .balloon_popup_wrapper{
+    font-size: 11px;
+  }
+
+  .balloon_info_body .accordion-heading .accordion-toggle{
+    padding: 0px 4px;
+    font-size: 10.5px;
+    font-weight: bold;
+  }
+
+  .balloon_info_body .accordion-inner{
+    padding: 0px 4px;
+  }
+
+  .balloon_info_body .accordion-heading a:hover{
+    text-decoration: none;
+  }
+
+  .balloon_info_body .accordion-heading .accordion-toggle i{
+    float: right;
+    margin-top: 5px;
+    opacity: .25;
+  }
+
+  .balloon_popup_wrapper .nav>li>a:hover, .balloon_popup_wrapper .nav>li>a:focus{
+    background-color: transparent;
+  }
+
+  .balloon_info_body table{
+    margin-bottom: 0px;
+  }
+
+  .resize-full-balloon{
+    margin-right: 6px; 
+    cursor: pointer;
+    color: #08c; 
+    opacity:0.25;
+  }
+
+  .resize-full-balloon i:hover, .resize-full-balloon i:focus{
+    color: #005580;
+  }
+
+
+  /* Sidebar specific styling -----------------------------------------*/
+  .sidebar-nav .accordion {
+    margin-bottom: 0px;
+  }
+
+  .sidebar-nav .dataTables_filter input[type="text"]{
+    height: 15px;
+    padding: 0px 4px;
+    margin-bottom: 0px;
+    font-size: 10px;
+    line-height: 15px;
+  }
+
+  .sidebar-nav table{
+    font-size: 10px;
+  }
+
+  .sidebar-nav table input[type="checkbox"]{
+    margin: 0px;
+  }
+
+  .sidebar-nav table tbody tr td:first-child{
+    /*width: 50px;*/
+    text-align: center;
+  }
+
+  .sidebar-nav .accordion-group{
+    /*width: 228px;*/
+    /*margin: 30px 0 0;*/
+    padding: 0;
+    background-color: #fff;
+    -webkit-border-radius: 6px;
+     -moz-border-radius: 6px;
+        border-radius: 6px;
+    -webkit-box-shadow: 0 1px 4px rgba(0,0,0,.065);
+     -moz-box-shadow: 0 1px 4px rgba(0,0,0,.065);
+        box-shadow: 0 1px 4px rgba(0,0,0,.065);
+  }
+
+  .sidebar-nav .accordion-heading a.accordion-toggle {
+    padding: 0px;
+    font-size: 10.5px;
+    font-weight: bold;
+  }
+
+  .sidebar-nav .accordion-heading a.accordion-toggle i{
+    float: right;
+    margin-top: 5px;
+    opacity: .25;
+  }
+
+  .sidebar-nav .accordion-heading {
+    display: block;
+    padding: 0px 4px;
+  }
+
+  .sidebar-nav .accordion-heading label.checkbox, .sidebar-nav .accordion-heading label {
+    margin-bottom: 0px;
+  }
+
+  .sidebar-nav .accordion-heading a:hover, a:focus{
+    text-decoration: none;
+  }
+
+  .sidebar-nav .accordion-inner{
+    padding: 5px 4px;
+  }
+
+  .sidebar-nav .accordion-inner table{
+    margin-bottom: 0px;
+  }
+
+  .sidebar-nav .accordion-inner .dataTables_info{
+    font-size: x-small;
+    text-align: center;
+    color: grey;
+  }
+
+
+  .sidebar-nav .accordion-inner .dataTables_filter label{
+    font-size: x-small;
+    color: grey;
+  }
+
+  /* Subnav Individual Sections on Side Bar ----------------------------*/
+  .subnav_section_wrapper {
+    width: 228px;
+    background-color: white;
+    -webkit-box-shadow: 0 1px 4px rgba(0,0,0,.065);
+    -moz-box-shadow: 0 1px 4px rgba(0,0,0,.065);
+    box-shadow: 0 1px 4px rgba(0,0,0,.065);
+  }
+
+  .subnav_section_wrapper .table{
+    margin-bottom: 0px;
+  }
+
+  .subnav_section_wrapper td:hover{
+    cursor: pointer;
+  }
+
+  .subnav_section_wrapper td:hover a{
+    color: #005580;
+  }
+
+  .subnav_section_wrapper td:hover a i{
+    color: #005580;
+    opacity: .5;
+  }
+
+  .subnav_section_wrapper a:hover, a:focus{
+    text-decoration: none;
+  }
+
+  /* Chevrons */
+  .subnav_section_wrapper i {
+    float: right;
+    margin-top: 2px;
+    margin-right: -6px;
+    opacity: .25;
+  }
+
+  /* Datatables styling */
+  /*
+  table.table thead .sorting,
+  table.table thead .sorting_asc,
+  table.table thead .sorting_desc,
+  table.table thead .sorting_asc_disabled,
+  table.table thead .sorting_desc_disabled {
+    cursor: pointer;
+    *cursor: hand;
+  }
+   
+  table.table thead .sorting { background: url('/resources/lib/DataTables/images/sort_both.png') no-repeat center right; }
+  table.table thead .sorting_asc { background: url('/resources/lib/DataTables/images/sort_asc.png') no-repeat center right; }
+  table.table thead .sorting_desc { background: url('/resources/lib/DataTables/images/sort_desc.png') no-repeat center right; }
+   
+  table.table thead .sorting_asc_disabled { background: url('/resources/lib/DataTables/images/sort_asc_disabled.png') no-repeat center right; }
+  table.table thead .sorting_desc_disabled { background: url('/resources/lib/DataTables/images/sort_desc_disabled.png') no-repeat center right; }
+  */
+
+  /* Detailed View Modal styling */
+  #detailed-view-modal {
+    border-radius: 0px;
+  }
+
+  #detailed-view-modal .modal-header{
+    background-color: #f5f5f5;
+  }
+
+  #detailed-view-modal .modal-body{
+    /*background-color: #f5f5f5;*/
+  }
+
+  #detailed-view-modal .modal-footer{
+    border-radius: 0px;
+  }
+
+  #detailed-view-modal{
+    margin-top: 0px !important;
+    top: 6% !important;
+  }
+
+  .detail-modal-preloader{
+    text-align: center;
+  }
+</style>
+
+<!-- Angular Templates -->
+<script type='text/ng-template' id='balloon_info.html'>
+  <div id="balloon_popup_polygons" style="display:none" class="balloon_popup_wrapper">
+    <div class="well" style="max-width: 340px; width: 271px; background-color: white;">
+      <ul class="nav nav-list">
+
+        <!-- Header -->
+        <li class="nav-header">
+            <span class="label label-success" style="width: 253px; text-align: center;">
+                <h4 id="balloon_region_name" style="margin: 0px; display: inline;">{{data.boundary_filter_name}}</h4>
+                <button class="balloon_close_button close" style="margin-right: 3px; display: inline;">&times;</button>
+            </span>
+        </li>
+        <li>
+            <span class="label label-info"><h5 style="margin: 0px;">{{data.timeframe_filter_name}}</h5></span>
+            <span ng-repeat='product in data.product_filter_name'>
+                <span class="label label-important"><h5 style="margin: 0px;">{{product}}</h5></span>
+            </span>
+            <span class='pull-right resize-full-balloon' style='margin-right: 6px; color: #08c; opacity:0.25;'>
+                <i class="icon-resize-full" data-toggle='modal' href='#detailed-view-modal' onclick='angular.element(document.getElementById("detailed-view-modal")).scope().activateDetailedModal({{ data }})'></i>
+                <!--<i class="icon-resize-full" data-toggle='modal' href='#detailed-view-modal' ng-click='filterService.detailed_modal_params = data.detailed_modal_params'></i>-->
+            </span>
+        </li>
+        <li class="divider"></li>
+        <!-- End Header -->
+
+        <div class="accordion balloon_info_body" id="balloon_info_body_{{ data.uuid }}">
+        
+          <!-- General Info -->
+          <div class="accordion-group">
+            <div class="accordion-heading">
+              <a class="accordion-toggle" data-toggle="collapse" data-parent="#balloon_info_body_{{ data.uuid }}" href="#collapseGeneralInfo_{{ data.uuid }}">
+                General Information <i class="icon-chevron-down" style=""></i>
+              </a>
+            </div>
+            <div id="collapseGeneralInfo_{{ data.uuid }}" class="accordion-body collapse in">
+              <div class="accordion-inner">
+                <div id="data_modal_general_info">
+                  <table class="table table-condensed table-hover table-striped" >
+                    <tbody>
+                      <!-- Boundary Type -->
+                      <tr ng-repeat='info in data.general_info' ng-show='data.request_type == "boundary"'>
+                        <td># of {{ info.name }}</td>
+                        <td>{{info.count}}</td>
+                        <td>{{ data.all_outlets.actual_total | number }}</td>
+                        <td style='background-color: {{ data.all_outlets.rgb }}'>({{ data.all_outlets.kpi_percent | number:2 }}%)</td>
+                      </tr>
+
+                      <tr ng-repeat='outlet_type_count in data.outlet_type_counts' ng-show='data.request_type == "boundary"'>
+                        <td>{{ outlet_type_count.desc }}</td>
+                        <td>{{ outlet_type_count.count }}</td>
+                        <td>{{ outlet_type_count.actual_total | number}}</td>
+                        <td style='background-color: {{ outlet_type_count.rgb }}'>({{ outlet_type_count.kpi_percent | number:2}}%)</td>
+                      </tr>
+
+                      <tr ng-show='data.request_type == "boundary"'>
+                        <td>&nbsp;</td>
+                        <td>&nbsp;</td>
+                        <td>&nbsp;</td>
+                        <td>&nbsp;</td>
+                      </tr>
+
+                      <tr ng-repeat='outlet_subtype_count in data.outlet_subtype_counts' ng-show='data.request_type == "boundary"'>
+                        <td>{{ outlet_subtype_count.subtype_desc }}</td>
+                        <td></td>
+                        <td>{{ outlet_subtype_count.total_outlet_count | number }}</td>
+                        <td>{{ outlet_subtype_count.total_activation | number }}</td>
+                      </tr>
+
+                      <!-- End Boundary Type -->
+                      <!-- Facility Type -->
+                      <tr ng-show='data.request_type == "facility"'>
+                        <td colspan='2'>
+                          <div id="myCarousel_{{ data.uuid }}" class="carousel slide">
+                            <ol class="carousel-indicators">
+                              <li data-target="#myCarousel_{{ data.uuid }}" data-slide-to="0" class=""></li>
+                              <li data-target="#myCarousel_{{ data.uuid }}" data-slide-to="1" class="active"></li>
+                              <li data-target="#myCarousel_{{ data.uuid }}" data-slide-to="2" class=""></li>
+                            </ol>
+                            <div class="carousel-inner">
+                              <div class="item">
+                                <img src="http://getbootstrap.com/2.3.2/assets/img/bootstrap-mdo-sfmoma-01.jpg" alt="">
+                                <!--
+                                <div class="carousel-caption">
+                                  <p>Caption 1</p>
+                                </div>
+                                -->
+                              </div>
+                              <div class="item active">
+                                <img src="http://getbootstrap.com/2.3.2/assets/img/bootstrap-mdo-sfmoma-02.jpg" alt="">
+                                <!--
+                                <div class="carousel-caption">
+                                  <p>Caption 2</p>
+                                </div>
+                                -->
+                              </div>
+                              <div class="item">
+                                <img src="http://getbootstrap.com/2.3.2/assets/img/bootstrap-mdo-sfmoma-03.jpg" alt="">
+                                <!--
+                                <div class="carousel-caption">
+                                  <p>Caption 3</p>
+                                </div>
+                                -->
+                              </div>
+                            </div>
+                            <a class="left carousel-control" href="#myCarousel_{{ data.uuid }}" data-slide="prev">&lsaquo;</a>
+                            <a class="right carousel-control" href="#myCarousel_{{ data.uuid }}" data-slide="next">&rsaquo;</a>
+                          </div>
+                        </td>
+                      </tr>
+                      <tr ng-show='data.request_type == "facility"'>
+                        <td>Current Outlet Type</td>
+                        <td>{{ data.facility_outlet_type }}</td>
+                      </tr>
+                      <!-- End Facility Type -->
+                    </tbody>
+                  </table>
+
+                <div class='detail-modal-preloader' ng-show='outlet_subtype_preloader'>
+                  <span class="label label-warning" style="color: black; background-color: white; text-shadow: none;">
+                    <img src="/resources/media/ajax_preloader.gif"> Loading. Please wait.
+                  </span>
+                </div>
+
+                </div>
+              </div>
+            </div>
+          </div>
+          <!-- End General Info -->
+        
+          <!-- Outlet Overall KPI -->
+          <!--
+          <div class="accordion-group">
+            <div class="accordion-heading">
+              <a class="accordion-toggle" data-toggle="collapse" data-parent="#balloon_info_body_{{ data.uuid }}" href="#collapseOutletOverallKPI_{{ data.uuid }}">
+                Outlet Overall KPI <i class="icon-chevron-down" style=""></i>
+              </a>
+            </div>
+            <div id="collapseOutletOverallKPI_{{ data.uuid }}" class="accordion-body collapse">
+              <div class="accordion-inner">
+                <table class="table table-condensed table-hover" ng-show='data.kpi' ng-repeat = 'facility_type in data.kpi'>
+                  <tbody>
+                    <tr class="label-important" ng-repeat="kpi in facility_type.kpi">
+                      <td>{{ kpi.name }}</td>
+                      <td id="balloon_num_stocks">{{kpi.value|number: 0}}</td>
+                    </tr>
+                  </tbody>
+                </table>
+              </div>
+            </div>
+          </div>
+          -->
+          <!-- End Outlet Overall KPI -->
+        
+          <!-- Product Families KPI -->
+          <!--
+          <div class="accordion-group">
+            <div class="accordion-heading">
+              <a class="accordion-toggle" data-toggle="collapse" data-parent="#balloon_info_body_{{ data.uuid }}" href="#collapseProductFamiliesKPI_{{ data.uuid }}">
+                Product Families KPI <i class="icon-chevron-down" style=""></i>
+              </a>
+            </div>
+            <div id="collapseProductFamiliesKPI_{{ data.uuid }}" class="accordion-body collapse">
+              <div class="accordion-inner">
+                <table class="table table-condensed table-hover" ng-show='data.kpi' ng-repeat = 'facility_type in data.kpi'>
+                  <tbody>
+                    <tr class="label-important" ng-repeat="kpi in facility_type.kpi">
+                      <td>{{ kpi.name }}</td>
+                      <td id="balloon_num_stocks">{{kpi.value|number: 0}}</td>
+                    </tr>
+                  </tbody>
+                </table>
+              </div>
+            </div>
+          </div>
+          -->
+          <!-- End Product Families KPI -->
+        </div>
+
+        <li class="divider"></li>
+        <li><a href="#">Help</a></li>
+      </ul>
+    </div>
+  </div>
+</script>
+
+<script type='text/ng-template' id='shimify.html'>
+  <div ng-transclude></div>
+  <iframe class="iframeshim" frameborder="0" scrolling="no">
+    <html><head></head><body></body></html>
+  </iframe>
+</script>
+
+<script type='text/ng-template' id='kpi_selector.html'>
+  <div class='container-fluid content-container'>
+    <div class='row-fluid'>
+      <div id="sidebar-container-kpi" class="span2">
+        <div class="well sidebar-nav" id="sidebar_kpi_panel_filter" style="background-color: ghostwhite; padding-left: 4px; padding-right: 4px;">
+          <span class="label">KPIs:</span>
+          <select class="chosen" style="margin-bottom: 0px; width: 235px;" ng-model="kpi_selected" ng-change="updateSelector()" ng-options="kpi.name for kpi in kpi_types"></select>
+        </div>
+      </div>
+    </div>
+  </div>
+</script>
+
+<script type='text/ng-template' id='boundaries_member.html'>
+  <li>
+    <label class='checkbox' style='font-size: 11px;'>
+      <input class="boundary_items_checkbox chkbox_boundary_lvl{{member.lvl}}_children" type="checkbox" name="{{member.name}}" value="{{member.id}}" ng-model='member.selected' ng-click='checkboxClicked(member)' ng-show="member.permission" ng-disabled="!member.permission"/> {{member.name}}
+      <span class="badge badge-info pull-right" ng-click='badgeClicked()' ng-show='member.children.length' onclick="return false;">{{ member.children.length }}<i class="icon-caret-down"></i></span>
+    </label>
+  </li>
+</script>
+
+<script type='text/ng-template' id='boundaries_collection.html'>
+    <ul><boundaries-member ng-repeat='member in collection' member='member'></member></ul>
+</script>
+
+<script type='text/ng-template' id='boundaries_filter2.html'>
+  <div class="accordion" id="sidebar_panel_filter_boundaries">
+    <div class="accordion-group boundary-level">
+      <div class="accordion-heading">
+        <label class="checkbox">
+          <input type="checkbox" class="boundary_lvl_all_type" name="top_lvl_all_select" value="b0" id="top_lvl_all_select" ng-model="top_lvl_all_select" ng-click="top_lvl_click()" ng-show="top_lvl_permission" ng-disabled="!top_lvl_permission"/>
+          <a class="accordion-toggle" data-toggle="collapse" id="collapse_boundary_lvl{{b.lvl}}" data-parent="#sidebar_panel_filter_boundaries" href="#collapse_top_lvl_collapsible"> {{top_lvl_desc}}<i class="icon-chevron-right" ng-show="boundaries.length"></i></a>
+        </label>
+      </div>
+      <div id="collapse_top_lvl_collapsible" class="accordion-body collapse" ng-show="boundaries.length" style='max-height: 200px; overflow-y: scroll'>
+        <div class="accordion-inner boundaries-filter-list">
+          <boundaries-collection collection="boundaries" isvisible="isvisible"></boundaries-collection>
+        </div>
+      </div>
+    </div>
+  </div>
+</script>
+
+<script type='text/ng-template' id='products_member.html'>
+  <li>
+    <label class='checkbox' style='font-size: 11px;'>
+      <input class="product_items_checkbox chkbox_boundary_lvl{{member.lvl}}_children" type="checkbox" name="{{member.name}}" value="{{member.id}}" ng-model='member.selected' ng-click='checkboxClicked(member)' ng-show='member.permission' ng-disabled='!member.permission'> {{member.name}}
+      <span class="badge badge-info pull-right" ng-click='badgeClicked()' ng-show='member.children.length' onclick="return false;">{{ member.children.length }}<i class="icon-caret-down"></i></span>
+    </label>
+  </li>
+</script>
+
+<script type='text/ng-template' id='products_collection.html'>
+    <ul><products-member ng-repeat='member in collection' member='member'></member></ul>
+</script>
+
+<script type='text/ng-template' id='products_filter2.html'>
+  <div class="accordion" id="sidebar_panel_filter_products">
+    <div class="accordion-inner products-filter-list">
+      <products-collection collection="products" isvisible="isvisible"></products-collection>
+    </div>
+  </div>
+</script>
+
+<script type='text/ng-template' id='boundaries_filter.html'>
+  <div class="accordion" id="sidebar_panel_filter_boundaries">{{selected_filters}}
+    <div class="accordion-group boundary-level" ng-repeat="b in data" id="boundary_level{{b.lvl}}">
+      <div class="accordion-heading">
+        <label class="checkbox">
+          <input type="checkbox" class="boundary_lvl_all_type" name="boundary_lvl{{b.lvl}}All" value="{{b.lvl}}" id="chkbox_boundary_lvl{{b.lvl}}">
+          <a class="accordion-toggle" data-toggle="collapse" id="collapse_boundary_lvl{{b.lvl}}" data-parent="#sidebar_panel_filter_boundaries" href="#collapse_boundary_lvl{{b.lvl}}_collapsible"> {{b.desc}}<i class="icon-chevron-right" ng-show="b.boundaries.length"></i></a>
+        </label>
+      </div>
+      <div id="collapse_boundary_lvl{{b.lvl}}_collapsible" class="accordion-body collapse" ng-show="b.boundaries.length">
+        <div class="accordion-inner">
+          <table id="boundary_table_list_level{{b.lvl}}" class="table table-condensed table-hover">
+            <thead>
+              <tr>
+                <th>Select</th>
+                <th>Name</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr ng-repeat="boundary in b.boundaries" detect-end-data-table-init>
+                <td>
+                  <input class="boundary_items_checkbox chkbox_boundary_lvl{{b.lvl}}_children" type="checkbox" name="{{boundary.name}}" value="{{boundary.id}}" ng-click='checkboxClicked();' ng-model='boundary.selected'>
+                </td>
+                <td>
+                  {{boundary.name}}
+                </td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+  </div>
+</script>
+
+<script type='text/ng-template' id='products_filter.html'>
+  <div class="accordion" id="sidebar_panel_filter_products">
+    <div class="accordion-group product-group" ng-repeat="pgt in data">
+      <div class="accordion-heading">
+        <label class="checkbox">
+          <input type="checkbox" class="{{pgt.name}}_all product_group_level_all" name="{{pgt.name}}All" value="{{pgt.id}}" id="chkbox_{{pgt.name}}All">
+          <a class="accordion-toggle" data-toggle="collapse" id="collapse{{pgt.name}}_productType" data-parent="#sidebar_panel_filter_products" data-target="#collapse_{{pgt.id}}_collapseElement"> {{pgt.name}}<i class="icon-chevron-right"></i></a>
+        </label>
+      </div>
+      <div id="collapse_{{pgt.id}}_collapseElement" class="accordion-body collapse">
+        <div class="accordion-inner">
+          <table id="product_table_list_level{{pgt.id}}" class="table table-condensed table-hover">
+            <thead >
+              <tr><th>Select</th><th>Name</th></tr>
+            </thead>
+            <tbody>
+              <tr ng-repeat="p in pgt.products" detect-end-data-table-init>
+                <td><input type="checkbox" class="product_items_checkbox" name="{{p.name}}" value="{{p.id}}"></td><td>{{p.name}}</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+  </div>
+</script>
+<!-- End Angular Templates -->
+
+<div class="row-fluid" >
+<div >
+
+<div id="map3d" ></div>
+</div>
+
+<div class="iframe-container offset10" shimify>
+    <div ng-controller="MapSwitchControl">
+        <div class="btn-group" >
+          <button class="btn btn-mini" ng-click="changeToGoogleEarth()" style="-webkit-border-radius: 0 !important; -moz-border-radius: 0 !important; border-radius: 0 !important;">Earth</button>
+          <button class="btn btn-mini" ng-click="changeToGoogleRoadmap()">Map</button>
+          <button class="btn btn-mini" ng-click="changeToGoogleSatelliteMap()" style="-webkit-border-radius: 0 !important; -moz-border-radius: 0 !important; border-radius: 0 !important;">Satellite</button>
+        </div>
+    </div>
+</div>
+
+
+<!-- Balloon Popup -->
+<div id="balloon_popup_iframe" class='iframe-container offset12 balloon_iframe_wrapper' shimify>
+  <balloon-info></balloon-info>
+</div>
+
+<!-- Detailed View Modal Popup -->
+<div shimify>
+  <div id="detailed-view-modal" class="modal container hide fade" tabindex="-1" ng-controller='detailedModalCtrl'>
+    <div class="modal-header">
+      <button type="button" class="close" data-dismiss="modal" aria-hidden="true">x</button>
+      <h3>
+        <span ng-repeat='i in forheader' class="label label-{{i.colorscheme}}" style="margin-left: 2px">{{i.desc}}</span><span ng-hide="forheader.length">No filter options selected</span>
+      </h3>
+    </div>
+    <div class="modal-body">
+      <ul id="detail-modal-Tab" class="nav nav-tabs">
+        <li class="active"><a href="#detail-modal-general-info" data-toggle="tab">General Information</a></li>
+        <li><a href="#detail-modal-data" data-toggle="tab">Data</a></li>
+        <li><a href="#detail-modal-charts" data-toggle="tab">Charts</a></li>
+        <li><a href="#detail-modal-salesforce" data-toggle="tab">Sales Force Data</a></li>
+        <!--<li><a href="#detail-modal-distributor-info" data-toggle="tab">Distributor Information</a></li>-->
+        <li ng-show='modal_params.request_type=="facility"'><a href="#detail-modal-owner-info" data-toggle="tab">Owner Information</a></li>
+        <li ng-show='modal_params.request_type=="facility"'><a href="#detail-modal-photo" data-toggle="tab">Outlet Photos</a></li>
+      </ul>
+      <div id="myTabContent" class="tab-content container-fluid">
+        <div class="tab-pane fade in active" id="detail-modal-general-info">
+          <table class="table table-bordered table-condensed table-striped" >
+            <thead>
+              <tr>
+                <th></th>
+                <th>Outlet Count</th>
+                <th ng-show='modal_params.request_type == "boundary"'>Actual Activations</th>
+                <th ng-show='modal_params.request_type == "boundary"'>Activations KPI %</th>
+              <tr>
+            </thead>
+            <tbody>
+              <!-- Boundary Type -->
+              <tr ng-repeat='info in modal_params.general_info' ng-show='modal_params.request_type == "boundary"'>
+                <td># of {{ info.name }}</td>
+                <td>{{ info.count }}</td>
+                <td>{{ modal_params.all_outlets.actual_total | number }}</td>
+                <td style='background-color: {{ modal_params.all_outlets.rgb }}'>{{ modal_params.all_outlets.kpi_percent | number:2 }}%</td>
+              </tr>
+              <tr ng-repeat='outlet_type_count in modal_params.outlet_type_counts' ng-show='modal_params.request_type == "boundary"'>
+                <td>{{ outlet_type_count.desc }}</td>
+                <td>{{ outlet_type_count.count }}</td>
+                <td>{{ outlet_type_count.actual_total | number}}</td>
+                <td style='background-color: {{ outlet_type_count.rgb }}'>{{ outlet_type_count.kpi_percent | number:2}}%</td>
+              </tr>
+              <!-- End Boundary Type -->
+              <!-- Facility Type -->
+              <tr ng-show='modal_params.request_type == "facility"'>
+                <td>Current Outlet Type</td>
+                <td>{{ modal_params.facility_outlet_type }}</td>
+              </tr>
+              <!-- End Facility Type -->
+            </tbody>
+          </table>
+          <table class="table table-bordered table-condensed table-striped" ng-show='modal_params.request_type == "boundary"'>
+            <thead>
+              <tr>
+                <th>Outlet Subtype</th>
+                <th>Outlet Count</th>
+                <th># Activations</th>
+              <tr>
+            </thead>
+            <tbody>
+              <!-- Boundary Type -->
+              <tr ng-repeat='outlet_subtype_count in modal_params.outlet_subtype_counts'>
+                <td>{{ outlet_subtype_count.subtype_desc }}</td>
+                <td>{{ outlet_subtype_count.total_outlet_count | number }}</td>
+                <td>{{ outlet_subtype_count.total_activation | number }}</td>
+              </tr>
+              <!-- End Boundary Type -->
+            </tbody>
+          </table>
+        </div>
+
+        <div class="tab-pane fade" id="detail-modal-data">
+          <div class='detail-modal-preloader' ng-show='data_preloader'>
+            <span class="label label-warning" style="color: black; background-color: white; text-shadow: none;">
+              <img src="/resources/media/ajax_preloader.gif"> Loading. Please wait.
+            </span>
+          </div>
+          <div class='detail-modal-body' ng-hide='data_preloader'>
+            <!--<table id='detail-modal-data-table' class='table table-bordered table-condensed table-striped' ng-table='tableParams'>-->
+            <table id='detail-modal-data-table' class='table table-bordered table-condensed table-striped'>
+              <thead>
+                <tr ng-show='modal_params.request_type == "boundary"'>
+                  <th colspan="7"></th>
+                  <th colspan="4" style="text-align: center;"># Outlets (# Activations)</th>
+                </tr>
+                <tr>
+                  <th></th>
+                  <th>Activations</th>
+                  <th style='border-left: none;'>(kpi %)</th>
+                  <th>Sellouts</th>
+                  <th style='border-left: none;'>(kpi %)</th>
+                  <th>Stocks</th>
+                  <th style='border-left: none;'>(kpi %)</th>
+                  <th ng-show='modal_params.request_type == "boundary"'>Super Platinum</th>
+                  <th ng-show='modal_params.request_type == "boundary"'>Platinum</th>
+                  <th ng-show='modal_params.request_type == "boundary"'>Gold</th>
+                  <th ng-show='modal_params.request_type == "boundary"'>Silver</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr ng-repeat='i in data_table' ng-show='data_table' class='{{ i.class }}'>
+                  <td>{{ i.name }}</td>
+                  <td>{{ i.activation_actual }}</td>
+                  <td style='border-left: none; background-color: {{ i.activation_kpi_rgb }}'>({{ i.activation_kpi | number:2}} %)</td>
+                  <td>{{ i.sellout_actual }}</td>
+                  <td style='border-left: none; background-color: {{ i.sellout_kpi_rgb }}'>({{ i.sellout_kpi | number:2}} %)</td>
+                  <td>{{ i.stock_actual }}</td>
+                  <td style='border-left: none; background-color: {{ i.stock_kpi_rgb }}'>({{ i.stock_kpi | number:2}} %)</td>
+                  <td ng-show='modal_params.request_type == "boundary"'>{{ i.super_platinum_outlet_total | number }} ({{ i.super_platinum_activation_total | number }})</td>
+                  <td ng-show='modal_params.request_type == "boundary"'>{{ i.platinum_outlet_total | number }} ({{ i.platinum_activation_total | number }})</td>
+                  <td ng-show='modal_params.request_type == "boundary"'>{{ i.gold_outlet_total | number }} ({{ i.gold_activation_total | number }})</td>
+                  <td ng-show='modal_params.request_type == "boundary"'>{{ i.silver_outlet_total | number }} ({{ i.silver_activation_total | number }})</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+        <div class="tab-pane fade" id="detail-modal-charts">
+          <div class='detail-modal-preloader' ng-show='charts_preloader'>
+            <span class="label label-warning" style="color: black; background-color: white; text-shadow: none;">
+              <img src="/resources/media/ajax_preloader.gif"> Loading. Please wait.
+            </span>
+          </div>
+          <div class='detail-modal-body' ng-hide='charts_preloader'>
+            <div id='chart_div' style='overflow: hidden; text-align: center;'></div>
+          </div>
+        </div>
+        <div class="tab-pane fade" id="detail-modal-salesforce">
+          <div class='detail-modal-preloader' ng-show='salesforce_preloader'>
+            <span class="label label-warning" style="color: black; background-color: white; text-shadow: none;">
+              <img src="/resources/media/ajax_preloader.gif"> Loading. Please wait.
+            </span>
+          </div>
+          <div class='detail-modal-body' ng-hide='salesforce_preloader'>
+            <!--<div ng-repeat='i in ["SFA", "SGA", "Canvasser", "Direct Sales", "SGP"]'>-->
+            <div class="accordion" id="accordion_salesforce">
+              <div class="accordion-group" ng-repeat='(i, j) in salesforce_table'>
+                <div class="accordion-heading">
+                  <a class="accordion-toggle" data-toggle="collapse" data-parent="#accordion_salesforce" href="#salesforce_table{{ j.id }}">
+                    {{ i }} ({{ j.total }})
+                  </a>
+                </div>
+                <div id="salesforce_table{{ j.id }}" class="accordion-body collapse">
+                  <div class="accordion-inner">
+            
+                      <div class="row-fluid">
+                        <table class='table table-bordered table-condensed table-striped'>
+                          <thead>
+                            <tr>
+                              <th class="span6">Name</th>
+                              <th class="span3">Combined Total ({{ j.combined_actual }})</th>
+                              <th class="span3" style='background-color: {{ j.combined_kpi_rgb }}'>Combined KPI% ({{ j.combined_kpi | number:2 }})</th>
+                            </tr>
+                          </thead>
+                          <tbody>
+                            <tr ng-repeat='child in j.children'>
+                              <td>{{ child.name }}</td>
+                              <td>{{ child.actual }}</td>
+                              <td style='background-color: {{ child.kpi_rgb }}'>{{ child.kpi | number:2 }}</td>
+                            </tr>
+                          </tbody>
+                        </table>
+                      </div>
+            
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="tab-pane fade" id="detail-modal-owner-info">
+          <div class='detail-modal-preloader' ng-show='owner_info_preloader'>
+            <span class="label label-warning" style="color: black; background-color: white; text-shadow: none;">
+              <img src="/resources/media/ajax_preloader.gif"> Loading. Please wait.
+            </span>
+          </div>
+          <div class='detail-modal-body' ng-hide='owner_info_preloader'>
+            <div class='row-fluid'>
+              <div class='span2'>
+                <img class="img-rounded" style="-webkit-user-select: none" ng-src="{{ owner_information.pic }}">
+              </div>
+              <div class='span10'>
+                <table class="table table-condensed table-bordered" >
+                  <tbody>
+                    <tr>
+                      <td>Name:</td>
+                      <td>{{ owner_information.name }}</td>
+                    </tr>
+                    <tr>
+                      <td>Address:</td>
+                      <td>{{ owner_information.address }}</td>
+                    </tr>
+                  </tbody>
+                </table>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="tab-pane fade" id="detail-modal-photo">
+          <table class="table table-condensed table-hover table-striped" >
+            <tbody>
+              <!-- Facility Type -->
+              <tr ng-show='modal_params.request_type == "facility"'>
+                <td colspan='2'>
+                  <div id="myCarousel_modal_{{ modal_params.uuid }}" class="carousel slide">
+                    <ol class="carousel-indicators">
+                      <li data-target="#myCarousel_modal_{{ modal_params.uuid }}" data-slide-to="0" class=""></li>
+                      <li data-target="#myCarousel_modal_{{ modal_params.uuid }}" data-slide-to="1" class=""></li>
+                      <li data-target="#myCarousel_modal_{{ modal_params.uuid }}" data-slide-to="2" class=""></li>
+                    </ol>
+                    <div class="carousel-inner">
+                      <div class="item">
+                        <img src="http://getbootstrap.com/2.3.2/assets/img/bootstrap-mdo-sfmoma-01.jpg" alt="">
+                        <!--
+                        <div class="carousel-caption">
+                          <p>Caption 1</p>
+                        </div>
+                        -->
+                      </div>
+                      <div class="item active">
+                        <img src="http://getbootstrap.com/2.3.2/assets/img/bootstrap-mdo-sfmoma-02.jpg" alt="">
+                        <!--
+                        <div class="carousel-caption">
+                          <p>Caption 2</p>
+                        </div>
+                        -->
+                      </div>
+                      <div class="item">
+                        <img src="http://getbootstrap.com/2.3.2/assets/img/bootstrap-mdo-sfmoma-03.jpg" alt="">
+                        <!--
+                        <div class="carousel-caption">
+                          <p>Caption 3</p>
+                        </div>
+                        -->
+                      </div>
+                    </div>
+                    <a class="left carousel-control" href="#myCarousel_modal_{{ modal_params.uuid }}" data-slide="prev">&lsaquo;</a>
+                    <a class="right carousel-control" href="#myCarousel_modal_{{ modal_params.uuid }}" data-slide="next">&rsaquo;</a>
+                  </div>
+                </td>
+              </tr>
+              <!-- End Facility Type -->
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+    <div class="modal-footer">
+      <button type="button" data-dismiss="modal" class="btn">Close</button>
+    </div>
+  </div>
+</div>
+
+<!-- Show Filter button -->
+<div class='iframe-container' style="left: 0px; line-height: 0px; top: 128.90625px; left: 26.363636016845703px;" shimify>
+  <div id="left_panel_open_control_container" style="display: none;">
+    <label class="left_panel_control label" style="margin: 0px;"><i class="icon-double-angle-right"></i><span style="font-size: 11.3px;"> Show Filters</span></label>
+  </div>
+</div>
+
+<!-- KPI Selector -->
+<div class='iframe-container' shimify>
+  <kpi-selector></kpi-selector>
+</div>
+
+<!-- Filter Sidebar -->
+<div class='iframe-container' style='top: 120px;' shimify>
+  <div class='container-fluid content-container' ng-controller = 'sidebarFilter'>
+    <div class="row-fluid">
+    <div id="sidebar-container" class="span2">
+        <div class="well sidebar-nav" id="sidebar_panel_filter" style="background-color: ghostwhite;">
+          <ul class="nav nav-list">
+            <li class="nav-header"><label class="left_panel_control label" style="text-transform: none;"><i class="icon-double-angle-left"></i><span style="font-size: 11.3px;"> Hide Filters</span></label></li>
+            <div>
+              <table class="table table-bordered table-condensed" style="background-color: gainsboro; margin-bottom: 0px; width: 272px;">
+                <tr>
+                  <td><span ng-repeat='i in filter_keywords' class="label label-{{i.colorscheme}}" style="margin-left: 2px">{{i.desc}}</span><span ng-hide="filter_keywords.length">No filter options selected</span></td>
+                </tr>
+              </table>
+            </div>
+            <li class="divider"></li>
+            <div class="accordion" id="sidebar_panel_filter_selections">
+              <div class="accordion-group">
+                <div class="accordion-heading">
+                    <label>    
+                    <a class="accordion-toggle" data-toggle="collapse" id="collapse_boundaries_selection_toggle" data-parent="#sidebar_panel_filter_selections" data-target="#collapse_boundaries"> Boundaries<i class="icon-chevron-right"></i></a>
+                    </label>
+                </div>
+                <div id="collapse_boundaries" class="accordion-body collapse">
+                  <div class="accordion-inner collapsible_hierarchy">
+                    <boundaries-filter2 boundaries-selected='selected_options["boundaries"]'></boundaries-filter2>
+                    <!--<boundaries-filter></boundaries-filter>-->
+                  </div>
+                </div>
+              </div>
+              <div class="accordion-group">
+                <div class="accordion-heading">
+                  <label>    
+                    <a class="accordion-toggle" data-toggle="collapse" id="collapse_products_selection_toggle" data-parent="#sidebar_panel_filter_selections" data-target="#collapse_products"> Products<i class="icon-chevron-right"></i></a>
+                  </label>
+                </div>
+                <div id="collapse_products" class="accordion-body collapse">
+                  <div class="accordion-inner collapsible_hierarchy">
+                    <!--<products-filter></products-filter>-->
+                    <products-filter2 products-selected='selected_options["products"]'></products-filter2>
+                  </div>
+                </div>
+              </div>
+              <div class="accordion-group">
+                <div class="accordion-heading">
+                  <label>    
+                    <a class="accordion-toggle" data-toggle="collapse" id="collapse_timeframe_selection_toggle" data-parent="#sidebar_panel_filter_selections" data-target="#collapse_timeframe"> Timeframe<i class="icon-chevron-right"></i></a>
+                  </label>
+                </div>
+                <div id="collapse_timeframe" class="accordion-body collapse">
+                  <div class="accordion-inner">
+                    <input type="text" value="" id="dp1" style="width: 249px;" disabled>
+                    <div id="time_frame_wrapper" class="">
+                      <table class="table table-bordered table-hover table-condensed">
+                        <tbody>
+                          <tr>
+                            <td>
+                              <div class="btn-toolbar" style="margin-top: 0px; margin-bottom: 0px;">
+                                <div class="btn-group btn-datepicker" >
+                                  <a class="btn btn-mini" href="#" onclick="datepicker_click('dp1', 'setViewLimitYear');">Year</a>
+                                  <a class="btn btn-mini" href="#" onclick="datepicker_click('dp1', 'setViewLimitMonth');">Month</a>
+                                  <a class="btn btn-mini" href="#" onclick="datepicker_click('dp1', 'setViewLimitWeek');">Week</a>
+                                  <a class="btn btn-mini" href="#" onclick="datepicker_click('dp1', 'setViewLimitDay');">Day</a>
+                                </div>
+                              </div>
+                            </td>
+                          </tr>
+                        </tbody>
+                      </table>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div id="datepicker_spacer" style="display: none;">
+              <br><br><br><br><br><br><br><br><br>
+            </div>
+
+            <li class="divider"></li>
+            <button class="btn btn-mini btn-primary" id="btn_filterOK" ng-click="doSubmit()" ng-disabled="btn_filterOK_disabled" ng-show="!btn_filterOK_disabled">OK</button>
+            <button class="btn btn-mini btn-primary" id="btn_loading" ng-show="btn_loading_display" disabled>Loading...</button>
+            <button class="btn btn-mini btn-danger" id="filterResetButton" onclick='resetFilters()' ng-disabled="btn_filterOK_disabled" ng-show="!btn_filterOK_disabled">RESET</button>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+</div>
+{% endraw %}
+{% endblock %}
