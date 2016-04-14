@@ -1,0 +1,21 @@
+Metadata-Version: 1.1
+Name: cGPolyEncode
+Version: 0.1.1
+Summary: Google Maps Polyline encoding (C++ extension)
+Home-page: http://code.google.com/p/py-gpolyencode/
+Author: Robert Coup
+Author-email: robert.coup@koordinates.com
+License: UNKNOWN
+Description: Encode line & polygon coordinates for use in Google Maps.
+Keywords: gis,geospatial,google-maps,gmaps,mapping
+Platform: UNKNOWN
+Classifier: Development Status :: 4 - Beta
+Classifier: Environment :: Web Environment
+Classifier: License :: OSI Approved :: BSD License
+Classifier: Intended Audience :: Developers
+Classifier: Operating System :: OS Independent
+Classifier: Programming Language :: Python
+Classifier: Programming Language :: C++
+Classifier: Topic :: Scientific/Engineering :: GIS
+Classifier: Topic :: Utilities
+Provides: cgpolyencode

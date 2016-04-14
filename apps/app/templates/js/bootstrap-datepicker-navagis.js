@@ -29,6 +29,7 @@
 	// Picker object
 	
 	var Datepicker = function(element, options){
+
         this.weekHighlight = false;
 		this.element = $(element);
 		this.format = DPGlobal.parseFormat(options.format||this.element.data('date-format')||'mm/dd/yyyy');
@@ -109,15 +110,13 @@
             this.minViewMode = 2;
 		    this.format = DPGlobal.parseFormat(this.element.data('date-format')||'yyyy');
 		    this.startViewMode = this.viewMode;
-		    this.fillDow();
+			this.fillDow();
 		    this.fillMonths();
 		    this.update();
 		    this.showMode();
-
         },
 
         setViewLimitMonth: function(e){
-
 			this.picker.remove();
 		    this.picker = $(DPGlobal.template)
 							.appendTo('body')
@@ -130,12 +129,12 @@
             this.minViewMode = 1;
 		    this.format = DPGlobal.parseFormat(this.element.data('date-format')||'mm/yyyy');
 		    this.startViewMode = this.viewMode;
-		    this.fillDow();
-		    this.fillMonths();
+			this.fillDow();
+			this.fillMonths();
 		    this.update();
 		    this.showMode();
         },
-		
+
         setViewLimitDay: function(e){
             this.picker.remove();
 		    this.picker = $(DPGlobal.template)
@@ -149,7 +148,7 @@
             this.minViewMode = 0;
 		    this.format = DPGlobal.parseFormat(this.element.data('date-format')||'dd/mm/yyyy');
 		    this.startViewMode = this.viewMode;
-		    this.fillDow();
+			this.fillDow();
 		    this.fillMonths();
 		    this.update();
 		    this.showMode();
@@ -168,7 +167,7 @@
             this.minViewMode = 0;
 		    this.format = DPGlobal.parseFormat(this.element.data('date-format')||'dd/mm/yyyy');
 		    this.startViewMode = this.viewMode;
-		    this.fillDow();
+			this.fillDow();
 		    this.fillMonths();
 		    this.update();
 		    this.showMode();
@@ -192,8 +191,7 @@
 			});
 			this.element.trigger({
 				type: 'show',
-				date: this.date,
-                
+				date: this.date
 			});
 		},
 		
@@ -269,6 +267,7 @@
                 return { 'type' : 'year', 'date_year' : this.date.getFullYear() };
             }
         },
+
 		place: function(){
 			var offset = this.component ? this.component.offset() : this.element.offset();
 			this.picker.css({
@@ -276,7 +275,7 @@
 				left: offset.left
 			});
 		},
-		
+
 		update: function(newDate){
 			this.date = DPGlobal.parseDate(
 				typeof newDate === 'string' ? newDate : (this.isInput ? this.element.prop('value') : this.element.data('date')),
@@ -300,19 +299,39 @@
 			this.picker.find('.datepicker-days thead').append(html);
 		},
 		fillMonths: function(){
-			var html = '';
-			var i = 0
+			var html = '',
+				i = 0,
+				now = new Date(),
+				currentValueYear;
+
+			var nowYear = now.getFullYear(),
+				nowMonth = now.getMonth();
+
+			if(this.date) currentValueYear = this.date.getFullYear();
+
 			while (i < 12) {
-				html += '<span class="month">'+DPGlobal.dates.monthsShort[i++]+'</span>';
+				if(currentValueYear) {
+					if(currentValueYear < nowYear) {
+						html += '<span class="month">' + DPGlobal.dates.monthsShort[i++] + '</span>';
+					} else {
+						html += '<span class="month' + (i > nowMonth ? ' disabled' : '') + '">' + DPGlobal.dates.monthsShort[i++] + '</span>';
+					}
+				} else {
+					html += '<span class="month">' + DPGlobal.dates.monthsShort[i++] + '</span>';
+				}
 			}
 			this.picker.find('.datepicker-months td').append(html);
 		},
-		
+
 		fill: function() {
 			var d = new Date(this.viewDate),
 				year = d.getFullYear(),
 				month = d.getMonth(),
 				currentDate = this.date.valueOf();
+
+			var startDataDate = {year: 2015};
+			var currentDate = new Date();
+			var currentYear = currentDate.getFullYear();
 
             //for week highlight calculation : yudi.
             // var selected_start_of_week = new Date(this.date.valueOf());
@@ -336,20 +355,20 @@
                 m_week_start,
                 m_week_end,
                 weekClsName;
-            
-			while(prevMonth.valueOf() < nextMonth) {             
-               
+
+			while(prevMonth.valueOf() < nextMonth) {
+
                 if (prevMonth.getDay() === this.weekStart) {
                     m_week_start = new Date(prevMonth.valueOf()); m_week_start.setDate(prevMonth.getDate() - ( ( prevMonth.getDay() - this.weekStart + 7) % 7));
                     if (this.date_start_of_week && (m_week_start.valueOf() == this.date_start_of_week.valueOf()))
-                    {   
+                    {
                         weekClsName = 'active';
                     }
                     else
                     {
                         weekClsName = '';
                     }
-                    
+
                     if (this.weekHighlight)
                     {
                         html.push('<tr class="datepicker-weekrow ' + weekClsName + '">');
@@ -378,7 +397,7 @@
 			}
 			this.picker.find('.datepicker-days tbody').empty().append(html.join(''));
 			var currentYear = this.date.getFullYear();
-			
+
 			var months = this.picker.find('.datepicker-months')
 						.find('th:eq(1)')
 							.text(year)
@@ -387,17 +406,22 @@
 			if (currentYear === year) {
 				months.eq(this.date.getMonth()).addClass('active');
 			}
-			
+
 			html = '';
 			year = parseInt(year/10, 10) * 10;
 			var yearCont = this.picker.find('.datepicker-years')
 								.find('th:eq(1)')
-									.text(year + '-' + (year + 9))
-									.end()
+									//.text(year + '-' + (year + 9))
+								.text(startDataDate.year + '-' + currentYear)
+								.end()
 								.find('td');
 			year -= 1;
 			for (var i = -1; i < 11; i++) {
-				html += '<span class="year'+(i === -1 || i === 10 ? ' old' : '')+(currentYear === year ? ' active' : '')+'">'+year+'</span>';
+				if(year < startDataDate.year || year > currentYear) {
+					html += '<span class="year disabled"></span>';
+				} else {
+					html += '<span class="year' + (i === -1 || i === 10 ? ' old' : '') + (currentYear === year ? ' active' : '') + '">' + year + '</span>';
+				}
 				year += 1;
 			}
 			yearCont.html(html);
@@ -416,13 +440,15 @@
 								break;
 							case 'prev':
 							case 'next':
-								this.viewDate['set'+DPGlobal.modes[this.viewMode].navFnc].call(
-									this.viewDate,
-									this.viewDate['get'+DPGlobal.modes[this.viewMode].navFnc].call(this.viewDate) + 
-									DPGlobal.modes[this.viewMode].navStep * (target[0].className === 'prev' ? -1 : 1)
-								);
-								this.fill();
-								this.set();
+								if(this.viewDate < new Date()) {
+									this.viewDate['set' + DPGlobal.modes[this.viewMode].navFnc].call(
+											this.viewDate,
+											this.viewDate['get' + DPGlobal.modes[this.viewMode].navFnc].call(this.viewDate) +
+											DPGlobal.modes[this.viewMode].navStep * (target[0].className === 'prev' ? -1 : 1)
+									);
+									this.fill();
+									this.set();
+								}
 								break;
 						}
 						break;

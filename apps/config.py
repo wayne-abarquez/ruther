@@ -17,8 +17,8 @@ basedir = os.path.abspath(os.path.dirname(__file__))
 #    SQLALCHEMY_DATABASE_URI = 'postgresql://ruther:m0ther@localhost:5432/ruther' #'sqlite:///' + os.path.join(basedir, 'app.db')
 #else:
 #    SQLALCHEMY_DATABASE_URI = 'postgresql://localhost:5432/ruther' #'sqlite:///' + os.path.join(basedir, 'app.db')
-# SQLALCHEMY_DATABASE_URI = 'postgresql://postgres:@localhost:5432/ruther' #'sqlite:///' + os.path.join(basedir, 'app.db')
-SQLALCHEMY_DATABASE_URI = 'postgresql://ruther:m0ther@localhost:5432/ruther'  # 'sqlite:///' + os.path.join(basedir, 'app.db')
+SQLALCHEMY_DATABASE_URI = 'postgresql://postgres:@localhost:5432/ruther' #'sqlite:///' + os.path.join(basedir, 'app.db')
+# SQLALCHEMY_DATABASE_URI = 'postgresql://ruther:m0ther@localhost:5432/ruther'  # 'sqlite:///' + os.path.join(basedir, 'app.db')
 
 SQLALCHEMY_MIGRATE_REPO = os.path.join(basedir, 'db_repository')
 log_fileout = '/var/www/ruther/logs/ruther_logs'

@@ -1,8 +1,9 @@
-rutherApp.controller('MapSwitchControl', ['$scope', 'googleEarthService', function ($scope, googleEarthService){	
-    $scope.changeToGoogleEarth = function()
-    {
-        googleEarthService.switchToGoogleEarth();
-    };
+rutherApp.controller('MapSwitchControl', ['$scope', 'googleEarthService', function ($scope, googleEarthService){
+    // Remove google earth
+    //$scope.changeToGoogleEarth = function()
+    //{
+    //    googleEarthService.switchToGoogleEarth();
+    //};
     
     $scope.changeToGoogleRoadmap = function ()
     {

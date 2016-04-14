@@ -306,10 +306,14 @@ rutherApp.factory('rutherGoogleMapService', ['$rootScope', function ($rootScope)
         var mapOptions = {
             zoom: zoom_value,
             center: latlng, //new google.maps.LatLng(-0.789275, 117.085186),
-            mapTypeId: _map_type_id,        
+            mapTypeId: google.maps.MapTypeId.MAP,
+            mapTypeControlOptions: {
+                position: google.maps.ControlPosition.TOP_RIGHT
+            },
+            //mapTypeId: _map_type_id,
             panControl: false,
             zoomControl: false,
-            mapTypeControl: false,
+            //mapTypeControl: false,
             scaleControl: false,
             streetViewControl: false,
             overviewMapControl: false
@@ -416,40 +420,67 @@ rutherApp.factory('rutherGoogleMapService', ['$rootScope', function ($rootScope)
         
         service.boundary_overlay_colors = {};       
     }
-    
+
+    var lastBoundaryOverlaysHighlightOptions = {};
+
+    function getBoundaryPolygonOptions (polygon) {
+        if(!polygon) return;
+
+        return {
+            strokeOpacity: polygon.get('strokeOpacity'),
+            strokeWeight: polygon.get('strokeWeight'),
+            fillColor: polygon.get('fillColor'),
+            fillOpacity: polygon.get('fillOpacity'),
+            strokeColor: polygon.get('strokeColor')
+        };
+    }
+
     service._highlightBoundary = function ( boundary_id )
     {
-        
         var overlays = service.overlays[boundary_id];
         if (overlays)
         {
+            // Fix Error when no data available -wayne
+            if(!lastBoundaryOverlaysHighlightOptions[boundary_id])  lastBoundaryOverlaysHighlightOptions[boundary_id] = {};
+
             for (var i=0; i<overlays.length; i++)
             {
+                // Fix Error when no data available -wayne
+                lastBoundaryOverlaysHighlightOptions[boundary_id][i] = getBoundaryPolygonOptions(overlays[i]);
+
                 overlays[i].setOptions({   
                     strokeOpacity: 0.8,
                     strokeWeight: 2,
                     fillColor: '#ff6600',
                     fillOpacity: 225,
-                    strokeColor: '#ff9933'});
+                    strokeColor: '#ff9933'
+                });
             }
         }
     };
     
     service._unhighlightBoundary = function ( boundary_id )
     {
-        
         var overlays = service.overlays[boundary_id];
         if (overlays)
         {
             var color = service.boundary_overlay_colors[boundary_id];
-            for (var i=0; i<overlays.length; i++)
-            {
-                overlays[i].setOptions({   
+
+            // Fix Error when no data available -wayne
+            if(!color && lastBoundaryOverlaysHighlightOptions[boundary_id]) {
+                var opts = lastBoundaryOverlaysHighlightOptions[boundary_id];
+                for (var i = 0; i < overlays.length; i++) overlays[i].setOptions(opts[i]);
+                return;
+            }
+
+            for (var i = 0; i < overlays.length; i++) {
+                overlays[i].setOptions({
                     strokeOpacity: 0.8,
                     strokeWeight: 2,
                     fillColor: '#' + convert(color[1]) + convert(color[2]) + convert(color[3]),
                     fillOpacity: color[0],
-                    strokeColor: '#' + convert(color[1]) + convert(color[2]) + convert(color[3])});
+                    strokeColor: '#' + convert(color[1]) + convert(color[2]) + convert(color[3])
+                });
             }
         }
     };

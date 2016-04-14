@@ -12,8 +12,6 @@ import os, logging, sys
 # from models.base import Base
 
 
-print "running from init"
-
 app = Flask(__name__)
 app.config.from_object('config')
 app.config['DEBUG'] = os.environ.get('DEBUG', False)
@@ -78,3 +76,5 @@ app.secret_key = os.urandom(24)
 # # they will be registered properly on the metadata.  Otherwise
 # # you will have to import them first before calling init_db()
 # Base.metadata.create_all(bind=engine)
+
+print "running from init.. Done loading app"

@@ -1,0 +1,9 @@
+2016-04-14 17:31:21 [17013] [INFO] Worker exiting (pid: 17013)
+2016-04-14 17:31:21 [17012] [INFO] Worker exiting (pid: 17012)
+{'date_updated': '2013-10-30T05:31:16.734752', 'values': [{'id': 1, 'level': 1, 'children': [{'name': 'Extream New Look', 'level': 2, 'id': 1, 'isLowest': True, 'permission': True}, {'name': 'Feature Phone', 'level': 2, 'id': 2, 'isLowest': True, 'permission': True}, {'name': 'Jambu', 'level': 2, 'id': 3, 'isLowest': True, 'permission': True}, {'name': 'SP Bisstel', 'level': 2, 'id': 4, 'isLowest': True, 'permission': True}, {'name': 'SP Eload', 'level': 2, 'id': 5, 'isLowest': True, 'permission': True}], 'name': 'Core Phone', 'permission': True}, {'id': 2, 'level': 1, 'children': [{'name': 'Dongle Ecosystem (Intertec)', 'level': 2, 'id': 17, 'isLowest': True, 'permission': True}], 'name': 'Data', 'permission': True}, {'level': 1, 'id': 3, 'name': 'Smartphone', 'permission': True}]}
+get boundary kpi timeframe: {'date_month': 10, 'date_day': 8, 'type': 'week', 'date_year': 2015}
+product type: product_group  timeframe type: week
+not product, timeframe type: week
+get boundary kpi week not product
+2016-04-14 17:31:21 [17005] [INFO] Handling signal: int
+2016-04-14 17:31:21 [17005] [INFO] Shutting down: Master

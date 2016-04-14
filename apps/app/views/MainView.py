@@ -1682,6 +1682,7 @@ def editKPIColorScheme(scheme_id):
     return jsonify(ret_data)
 
 def getFacilityKPI(facility, products, timeframe, kpi_type):
+        # print "get facility kpi timeframe: {0}".format(timeframe)
         days = 0
 
         if products['type'] == 'product':
@@ -1783,9 +1784,12 @@ def getFacilityKPI(facility, products, timeframe, kpi_type):
         return boundary_ret
 
 def getBoundaryKPI(boundary, products, timeframe, kpi_type):
+        # print "get boundary kpi timeframe: {0}".format(timeframe)
         days = 0
 
+        # print "product type: {0}  timeframe type: {1}".format(products['type'], timeframe['type'])
         if products['type'] == 'product':
+            # print "product, timeframe type: {0}".format(timeframe['type'])
             product_id = int(products['id'])
             if timeframe['type'] == 'year':
                 t = SumBoundaryProductYear
@@ -1801,13 +1805,15 @@ def getBoundaryKPI(boundary, products, timeframe, kpi_type):
                 t = SumBoundaryProductWeek
                 q = t.query.filter_by( product_id = product_id, date_start_of_week = date(timeframe['date_year'], timeframe['date_month'], timeframe['date_day']) )
                 days = 7
-            # end if
+                # print "get boundary kpi week"
+                # end if
             if timeframe['type'] == 'day':
                 t = SumBoundaryProductDay
                 q = t.query.filter_by( product_id = product_id, date_day = timeframe['date_day'], date_year = timeframe['date_year'], date_month = timeframe['date_month'] )
                 days = 1
             # end if
         else:
+            # print "not product, timeframe type: {0}".format(timeframe['type'])
             product_group_id = int(products['id'])
             if timeframe['type'] == 'year':
                 t = SumBoundaryProductGroupYear
@@ -1820,6 +1826,7 @@ def getBoundaryKPI(boundary, products, timeframe, kpi_type):
                 days =  calendar.monthrange(timeframe['date_year'], timeframe['date_month'])[1]
             # end if
             if timeframe['type'] == 'week':
+                # print "get boundary kpi week not product"
                 t = SumBoundaryProductGroupWeek
                 q = t.query.filter_by( product_group_id = product_group_id, date_start_of_week = date(timeframe['date_year'], timeframe['date_month'], timeframe['date_day']))
                 days = 7

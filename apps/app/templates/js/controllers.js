@@ -329,6 +329,8 @@ rutherApp.controller('sidebarFilter', ['$scope', '$http', '$location', 'filterSe
             filterService.setCurrentViewData(request_params['boundary_filter_type'], data);
             filterService.setActiveFilters(filterService.selected_boundary_filters, filterService.selected_product_filters, filterService.selected_timeframe_filters);
 
+            console.log('filterService.selected_timeframe_filters: ', filterService.selected_timeframe_filters);
+
             var success_callback_func = function(errorcode, errrormsg, request_params, data){
                 googleEarthService.updateKPI(request_params['kpi_type'], data);
             }   
@@ -387,8 +389,15 @@ rutherApp.controller('sidebarFilter', ['$scope', '$http', '$location', 'filterSe
         $('#topdisplaybanner').text('Fetching data...').show();
         $scope.apply();
     }
-    
-    $('#dp1').datepicker({weekStart: 4}).on('changeDate', function(ev){ 
+
+    $('#dp1').datepicker({
+        weekStart: 4,
+        onRender: function (date) { // disable future dates
+            return date.valueOf() > new Date().valueOf() ? 'disabled' : '';
+        }
+    })
+        .on('changeDate', function(ev, params){
+        console.log('getval date: ', $('#dp1').data('datepicker').getValue());
         filterService.selected_timeframe_filters = $('#dp1').data('datepicker').getValue();
         filterService.broadcastSelectedFilterChanged_Event();
     });

@@ -15,6 +15,11 @@ $(document).ready(function(){
     // Set up height of map3d object
     $('#map3d').height($(document).height()-(42));  // 42px is the height of the navbar
 
+
+    //$('#dp1').datepicker({
+    //
+    //});
+
     // Accordion helper functions
     setTimeout(function(){
         // Auto show dataTable contents of .accordion-body to speed up rendering
@@ -131,14 +136,14 @@ function gen_uuid(){
 }
 
 function datepicker_click(input_target, date_type){
-    $('#datepicker_spacer').show(); 
+    $('#datepicker_spacer').show();
     $('#'+input_target)
         .datepicker(date_type)
         .datepicker('show')
         .on('hide', function(){
             $('#datepicker_spacer').hide();
         })
-        .on('changeDate', function(){
+        .on('changeDate', function(ev){
             $('#'+input_target).datepicker('hide');
         });
 }
@@ -162,9 +167,11 @@ function firstLoadFilters(){
     $('.boundaries-filter-list input:checkbox:enabled:first').trigger('click');
     // Load first top level product
     $('input:checkbox:enabled:first', '#sidebar_panel_filter_products').trigger('click');
-    // Load current day today
+    // Load October 2015 date, where data is available
     $('#dp1').datepicker('show');
-    $('.day.active').trigger('click');
+    $('#dp1').val('10/2015');
+    datepicker_click('dp1', 'setViewLimitMonth');
+    $('#dp1').trigger('changeDate');
     $('#dp1').datepicker('hide');
     // Submit
     $('#btn_filterOK').trigger('click');
